@@ -27,12 +27,6 @@ class Notes : public QMainWindow {
     Q_OBJECT
 
    public:
-    // 0 - false
-    // 1 - true
-    int isListHide = 0;
-    int isDarkMode;
-    int isFullScreen = 0;
-
     // layouts
     QVBoxLayout *mainLayout;
     QHBoxLayout *listLayout;
@@ -42,6 +36,10 @@ class Notes : public QMainWindow {
     QHBoxLayout *windowControl;
     QHBoxLayout *noteNameLayout;
 
+    QSettings *settings;
+
+    bool isFullScreen;
+
     explicit Notes(QMainWindow *parent = nullptr);
     ~Notes();
 
@@ -50,8 +48,8 @@ class Notes : public QMainWindow {
     void saveNotes();
     void removeNote();
     void doubleClick(QListWidgetItem *);
-    void clickHideList();
-    void openFullScreenWindow();
+    void hideList();
+    void openFullScreen();
 
    protected:
    private:

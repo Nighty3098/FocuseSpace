@@ -20,8 +20,8 @@
 #include "ui_notes.h"
 
 Notes::Notes(QMainWindow *parent) : QMainWindow(parent) {
-    QSettings settings("Notes", "Notes");
-    restoreGeometry(settings.value("geometry").toByteArray());
+    settings = new QSettings("Notes", "Notes");
+    restoreGeometry(settings->value("geometry").toByteArray());
 
     QSqlQuery query;
 
@@ -33,19 +33,10 @@ Notes::Notes(QMainWindow *parent) : QMainWindow(parent) {
         "createdTime VARCHAR(50)"
         ");";
 
-    QString str2 =
-        "CREATE TABLE notes_settings ( "
-        "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-        "isListHide INTEGER, "
-        "isFullScreen INTEGER, "
-        "lastNote VARCHAR(200), "
-        "isDarkMode INTEGER"
-        ");";
-
     if (!query.exec(str)) {
         qDebug() << query.lastError();
     } else {
-        qDebug() << "Таблица notes создана";
+        qDebug() << "Notes table was created";
     }
 
     setMinimumSize(300, 350);
@@ -78,34 +69,27 @@ Notes::Notes(QMainWindow *parent) : QMainWindow(parent) {
     notesList = new QListWidget(this);
     notesList->setMinimumSize(50, 20);  // 560);
     notesList->setMaximumSize(215, notesList->maximumHeight());
-    notesList->setFont(QFont("SF Pro Black", 12));
-    connect(notesList, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this,
-            SLOT(doubleClick(QListWidgetItem *)));
+    notesList->setFont(QFont("SF Pro Black", 10));
 
     saveButton = new QPushButton("SAVE", this);
     saveButton->setMinimumSize(50, 30);
     saveButton->setFont(QFont("SF Pro Black", 10));
-    connect(saveButton, SIGNAL(clicked()), this, SLOT(saveNotes()));
 
     backButton = new QPushButton("BACK", this);
     backButton->setMinimumSize(50, 30);
     backButton->setFont(QFont("SF Pro Black", 10));
-    connect(backButton, SIGNAL(clicked()), this, SLOT(toMainWindow()));
 
     removeButton = new QPushButton("REMOVE", this);
     removeButton->setMinimumSize(50, 30);
     removeButton->setFont(QFont("SF Pro Black", 10));
-    connect(removeButton, SIGNAL(clicked()), this, SLOT(removeNote()));
 
     hideNotesList = new QPushButton("HIDE", this);
     hideNotesList->setMaximumSize(101, 30);
     hideNotesList->setFont(QFont("SF Pro Black", 10));
-    connect(hideNotesList, SIGNAL(clicked()), this, SLOT(clickHideList()));
 
     fullScreen = new QPushButton("MAXIMIZE", this);
     fullScreen->setMaximumSize(101, 30);
     fullScreen->setFont(QFont("SF Pro Black", 10));
-    connect(fullScreen, SIGNAL(clicked()), this, SLOT(openFullScreenWindow()));
 
     setStatusBar(statusBar);
 
@@ -133,6 +117,30 @@ Notes::Notes(QMainWindow *parent) : QMainWindow(parent) {
     mainLayout->addLayout(listLayout);
     mainLayout->addLayout(buttonsLayout);
 
+    bool isVisible = settings->value("isVisible", true).toBool();
+    notesList->setVisible(isVisible);
+
+    bool isFullScreen = settings->value("isFullScreen", false).toBool();
+
+    if (isFullScreen) {
+        this->showFullScreen();
+    } else {
+        this->show();
+    }
+
+    connect(backButton, SIGNAL(clicked()), this, SLOT(toMainWindow()));
+
+    connect(removeButton, SIGNAL(clicked()), this, SLOT(removeNote()));
+
+    connect(fullScreen, SIGNAL(clicked()), this, SLOT(openFullScreen()));
+
+    connect(saveButton, SIGNAL(clicked()), this, SLOT(saveNotes()));
+
+    connect(notesList, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this,
+            SLOT(doubleClick(QListWidgetItem *)));
+
+    connect(hideNotesList, SIGNAL(clicked()), this, SLOT(hideList()));
+
     query.exec("SELECT * FROM notes");
     while (query.next()) {
         QString name = query.value("name").toString();
@@ -149,17 +157,32 @@ Notes::Notes(QMainWindow *parent) : QMainWindow(parent) {
 }
 
 Notes::~Notes() {
-    QSettings settings("Notes", "Notes");
-    settings.setValue("geometry", saveGeometry());
+    settings = new QSettings("Notes", "Notes");
+    settings->setValue("geometry", saveGeometry());
 
     delete ui;
+}
+
+void Notes::hideList() {
+    settings = new QSettings("Notes", "Notes");
+
+    notesList->setVisible(!notesList->isVisible());
+    settings->setValue("isVisible", notesList->isVisible());
+    hideNotesList->setText(notesList->isVisible() ? "HIDE" : "SHOW");
+}
+
+void Notes::openFullScreen() {
+    this->setWindowState(this->windowState() ^ Qt::WindowFullScreen);
+    isFullScreen = this->windowState() & Qt::WindowFullScreen;
+    settings->setValue("isFullScreen", isFullScreen);
+    fullScreen->setText(isFullScreen ? "MINIMIZE" : "MAXIMIZE");
 }
 
 void Notes::toMainWindow() {
     QString text = noteEdit->toPlainText();
     if (text.isEmpty()) {
-        QSettings settings("Notes", "Notes");
-        settings.setValue("geometry", saveGeometry());
+        settings = new QSettings("Notes", "Notes");
+        settings->setValue("geometry", saveGeometry());
 
         close();
         MainWindow *mainWindow = new MainWindow(this);
@@ -183,8 +206,7 @@ void Notes::saveNotes() {
     QString itemText = name + "\n" + createdTime + "\n";
 
     if (!text.isEmpty()) {
-        if (query.exec("SELECT * FROM library WHERE '" + name +
-                       "' LIKE name")) {
+        if (query.exec("SELECT * FROM notes WHERE '" + name + "' LIKE name")) {
             if (query.exec("UPDATE notes SET name = '" + name + "' text='" +
                            text + "' ")) {
                 qDebug() << name << " was updated";
@@ -289,41 +311,3 @@ void Notes::removeNote() {
     }
 }
 
-// 0 - false
-// 1 - true
-
-void Notes::clickHideList() {
-    QSqlQuery query;
-
-    if (isListHide == 0) {
-        notesList->hide();
-        isListHide = 1;
-        query.exec("UPDATE notes_settings SET isListHide = 1 ");
-
-        hideNotesList->setText("SHOW");
-    } else {
-        notesList->show();
-        isListHide = 0;
-        query.exec("UPDATE notes_settings SET isListHide = 0 ");
-
-        hideNotesList->setText("HIDE");
-    }
-}
-
-void Notes::openFullScreenWindow() {
-    QSqlQuery query;
-
-    if (isFullScreen == 0) {
-        Notes::showFullScreen();
-        isFullScreen = 1;
-        query.exec("UPDATE notes_settings SET isFullScreen = 1 ");
-
-        fullScreen->setText("MINIMIZE");
-    } else {
-        Notes::showNormal();
-        isFullScreen = 0;
-        query.exec("UPDATE notes_settings SET isFullScreen = 0 ");
-
-        fullScreen->setText("MAXIMIZE");
-    }
-}
