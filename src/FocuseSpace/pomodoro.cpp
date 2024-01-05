@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QTimer>
 #include <QVBoxLayout>
+#include <iomanip>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -83,7 +84,7 @@ void Pomodoro::startPomodoro() {
 
         titleLabel->setText("WORK");
         titleLabel->setFont(QFont("SF Pro Black", 70));
-        titleLabel->setStyleSheet(" color: #ff3438; ");
+        titleLabel->setStyleSheet(" color: #c75057; ");
 
         startButton->setText("STOP");
         timer->start(1000);
@@ -115,7 +116,7 @@ void Pomodoro::startBreak() {
 
     titleLabel->setText("BREAK");
     titleLabel->setFont(QFont("SF Pro Black", 70));
-    titleLabel->setStyleSheet(" color: #5fe053; ");
+    titleLabel->setStyleSheet(" color: #81c750; ");
 
     setWindowTitle("~ break ~");
     timer->start(1000);
@@ -133,6 +134,7 @@ void Pomodoro::updateTimer() {
                                  .arg(seconds, 2, 10, QChar('0'));
         titleLabel->setText(timeString);
         titleLabel->setFont(QFont("SF Pro Black", 70));
+
     } else {
         timer->stop();
         if (isPomodoro) {
