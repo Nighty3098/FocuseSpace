@@ -19,7 +19,7 @@ Pomodoro::Pomodoro(QMainWindow *parent) : QMainWindow(parent) {
     QSettings settings("Pomodoro", "Pomodoro");
     restoreGeometry(settings.value("geometry").toByteArray());
 
-    setMinimumSize(300, 220);
+    setMinimumSize(200, 200);
 
     QWidget *centralWidget = new QWidget(this);
     setCentralWidget(centralWidget);
@@ -38,6 +38,9 @@ Pomodoro::Pomodoro(QMainWindow *parent) : QMainWindow(parent) {
 
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateTimer()));
+
+    progressBar = new QProgressBar(this);
+    progressBar->setStyleSheet(" color: #ffffff; background-color: #2e3440;");
 
     startButton = new QPushButton("START", this);
     startButton->setMinimumSize(100, 30);
@@ -62,6 +65,7 @@ Pomodoro::Pomodoro(QMainWindow *parent) : QMainWindow(parent) {
     buttonsLayout_2->addWidget(backButton);
 
     mainLayout->addLayout(infoLayout);
+    mainLayout->addWidget(progressBar);
     mainLayout->addLayout(buttonsLayout_1);
     mainLayout->addLayout(buttonsLayout_2);
 
@@ -86,6 +90,10 @@ void Pomodoro::startPomodoro() {
         titleLabel->setFont(QFont("SF Pro Black", 70));
         titleLabel->setStyleSheet(" color: #c75057; ");
 
+        progressBar->setRange(0, timeLeft);
+        progressBar->setValue(timeLeft);
+        progressBar->setStyleSheet( "color: #c75057; selection-background-color: #c75057;");
+
         startButton->setText("STOP");
         timer->start(1000);
     }
@@ -98,6 +106,8 @@ void Pomodoro::startPomodoro() {
         titleLabel->setGeometry(0, 20, 250, 50);
         titleLabel->setAlignment(Qt::AlignCenter);
         titleLabel->setFont(QFont("SF Pro Black", 40));
+
+        progressBar->setValue(0);
 
         startButton->setText("START");
 
@@ -118,6 +128,10 @@ void Pomodoro::startBreak() {
     titleLabel->setFont(QFont("SF Pro Black", 70));
     titleLabel->setStyleSheet(" color: #81c750; ");
 
+    progressBar->setRange(0, timeLeft);
+    progressBar->setValue(timeLeft);
+    progressBar->setStyleSheet( "color: #81c750; selection-background-color: #81c750;" );
+
     setWindowTitle("~ break ~");
     timer->start(1000);
 }
@@ -125,6 +139,7 @@ void Pomodoro::startBreak() {
 void Pomodoro::updateTimer() {
     if (timeLeft > 0) {
         timeLeft--;
+        progressBar->setValue(timeLeft);
 
         int minutes = timeLeft / 60;
         int seconds = timeLeft % 60;

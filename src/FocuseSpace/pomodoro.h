@@ -30,7 +30,7 @@ private slots:
 
 private:
     QLabel *titleLabel;
-    //QProgressBar *progressBar;
+    QProgressBar *progressBar;
     QTimer *timer;
     QMessageBox *notificationwork;
     QMessageBox *notificationpause;
