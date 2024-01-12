@@ -32,6 +32,16 @@ cd FocuseSpace
 bash build.sh
 ```
 
+<h1>Launch application</h1>
+```shell
+bash FocuseSpace.sh
+```
+
+<h1>Update application</h1>
+```shell
+git pull && bash build.sh
+```
+
 > The compiled file is located in the directory : src/FocuseSpace/FocuseSpace
 
 <h1>TO-DO</h1>
@@ -43,6 +53,6 @@ bash build.sh
 - [ ] Add colorsheme preferences
 - [ ] Add dark and light theme
 - [ ] Add more functionality
-- [ ] Add user preferences
+- [x] Add user preferences
 - [ ] Make an application for android
 - [ ] Add login with user name and password
