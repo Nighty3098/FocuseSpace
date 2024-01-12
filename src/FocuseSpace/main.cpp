@@ -7,7 +7,6 @@
 #include <QWidget>
 
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
 
 static bool createConnection() {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
@@ -34,6 +33,7 @@ int main(int argc, char *argv[]) {
 
     QFile file(":/stylesheet.qss");
     file.open(QFile::ReadOnly);
+
 
     MainWindow mainWindow;
     mainWindow.setWindowTitle(" ~ focuse space ~ ");

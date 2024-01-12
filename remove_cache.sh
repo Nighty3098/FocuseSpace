@@ -25,5 +25,8 @@ rm src/FocuseSpace/qmake_qmake_immediate.qrc
 rm src/FocuseSpace/qrc_qmake_qmake_immediate.cpp
 rm src/FocuseSpace/qrc_qmake_qmake_immediate.o
 rm src/FocuseSpace/qrc_resource.o
+rm src/FocuseSpace/settings.o
+rm src/FocuseSpace/moc_settings.o
+rm src/FocuseSpace/moc_settings.cpp
 
 echo "OK"

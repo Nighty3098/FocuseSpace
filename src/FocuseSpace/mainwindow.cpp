@@ -10,42 +10,56 @@
 #include <QWidget>
 #include <QtSql/QSqlDatabase>
 
-#include "ui_mainwindow.h"
-
 MainWindow::MainWindow(QMainWindow *parent) : QMainWindow(parent) {
+    GlobalSettings = new QSettings("Settings", "Settings");
+    QFont selectedFont = GlobalSettings->value("font").value<QFont>();
+    
     setWindowTitle(" ~ focuse space ~ ");
-    setFixedSize(700, 350);
+    setFixedSize(700, 380);
 
     statusBar = new QStatusBar(this);
+    statusBar->setFont(QFont(selectedFont));
+    statusBar->setStyleSheet("color: #FFFFFF; font-size:  9px;");
 
     imageLabel = new QLabel(this);
     QPixmap image("://tasks.png");
-    imageLabel->setGeometry(50, 50, 300, 300);
+    imageLabel->setGeometry(50, 80, 300, 300);
     imageLabel->setPixmap(image);
 
     titleMain = new QLabel("HOME PAGE", this);
-    titleMain->setGeometry(300, 30, 400, 60);
+    titleMain->setGeometry(0, 30, 700, 60);
     titleMain->setAlignment(Qt::AlignCenter);
-    titleMain->setFont(QFont("SF Pro Black", 30));
-    titleMain->setStyleSheet(" color: #ffffff; ");
+    titleMain->setFont(QFont(selectedFont));
+    titleMain->setStyleSheet(" color: #ffffff; font-size: 30px;");
 
     openTasks = new QPushButton("TASKS", this);
-    openTasks->setGeometry(350, 150, 300, 40);
-    openTasks->setFont(QFont("SF Pro Black", 12));
+    openTasks->setGeometry(350, 120, 300, 40);
+    openTasks->setFont(QFont(selectedFont));
+    openTasks->setStyleSheet("color: #FFFFFF; font-size:  11px;");
 
     connect(openTasks, SIGNAL(clicked()), this, SLOT(openTasksWin()));
 
     openNotes = new QPushButton("NOTES", this);
-    openNotes->setGeometry(350, 200, 300, 40);
-    openNotes->setFont(QFont("SF Pro Black", 12));
+    openNotes->setGeometry(350, 170, 300, 40);
+    openNotes->setFont(QFont(selectedFont));
+    openNotes->setStyleSheet("color: #FFFFFF; font-size:  11px;");
 
     connect(openNotes, SIGNAL(clicked()), this, SLOT(openNotesWin()));
 
     openTimer = new QPushButton("POMODORO", this);
-    openTimer->setGeometry(350, 250, 300, 40);
-    openTimer->setFont(QFont("SF Pro Black", 12));
+    openTimer->setGeometry(350, 220, 300, 40);
+    openTimer->setFont(QFont(selectedFont));
+    openTimer->setStyleSheet("color: #FFFFFF; font-size:  11px;");
 
     connect(openTimer, SIGNAL(clicked()), this, SLOT(openPomodoroWin()));
+
+
+    openSettings = new QPushButton("SETTINGS", this);
+    openSettings->setGeometry(450, 270, 100, 40);
+    openSettings->setFont(QFont(selectedFont));
+    openSettings->setStyleSheet("color: #FFFFFF; font-size:  11px;");
+
+    connect(openSettings, SIGNAL(clicked()), this, SLOT(openSettingsWin()));
 
     setStatusBar(statusBar);
 
@@ -55,15 +69,22 @@ MainWindow::MainWindow(QMainWindow *parent) : QMainWindow(parent) {
 
 MainWindow::~MainWindow() {}
 
+void MainWindow::openSettingsWin() {
+    // hide();
+    settings_window = new Settings(this);
+    //settings_window->setWindowIcon(QIcon("://tasks.svg"));
+    settings_window->show();
+}
+
 void MainWindow::openTasksWin() {
-    hide();
+    // hide();
     tasks_window = new Tasks(this);
     tasks_window->setWindowIcon(QIcon("://tasks.svg"));
     tasks_window->show();
 }
 
 void MainWindow::openNotesWin() {
-    hide();
+    // hide();
     notes_window = new Notes(this);
     notes_window->setWindowIcon(QIcon("://notes.svg"));
     notes_window->show();
@@ -78,13 +99,13 @@ void MainWindow::openPomodoroWin() {
 
 void MainWindow::keyPressEvent(QKeyEvent *e) {
     if (e->key() == Qt::Key_1) {
-        hide();
+        // hide();
         tasks_window = new Tasks(this);
         tasks_window->setWindowIcon(QIcon("://tasks.svg"));
         tasks_window->show();
     }
     if (e->key() == Qt::Key_2) {
-        hide();
+        // hide();
         notes_window = new Notes(this);
         notes_window->setWindowIcon(QIcon("://notes.svg"));
         notes_window->show();

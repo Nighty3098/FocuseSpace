@@ -16,12 +16,13 @@
 #include <QVBoxLayout>
 
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include "ui_notes.h"
 
 Notes::Notes(QMainWindow *parent) : QMainWindow(parent) {
     settings = new QSettings("Notes", "Notes");
     restoreGeometry(settings->value("geometry").toByteArray());
+
+    GlobalSettings = new QSettings("Settings", "Settings");
+    QFont selectedFont = GlobalSettings->value("font").value<QFont>();
 
     QSqlQuery query;
 
@@ -55,43 +56,55 @@ Notes::Notes(QMainWindow *parent) : QMainWindow(parent) {
     mainLayout->setSpacing(10);
 
     statusBar = new QStatusBar(this);
+    statusBar->setFont(QFont(selectedFont));
+    statusBar->setStyleSheet("color: #FFFFFF; font-size:  9px;");
 
     noteName = new QLineEdit(this);
     noteName->setMinimumSize(50, 40);
-    noteName->setFont(QFont("SF Pro Black", 14));
+    noteName->setFont(QFont(selectedFont));
     noteName->setPlaceholderText("Title");
+    noteName->setStyleSheet("color: #FFFFFF; font-size:  10px;");
 
     noteEdit = new QTextEdit(this);
     noteEdit->setMinimumSize(50, 50);
-    noteEdit->setFont(QFont("SF Pro Black", 11));
+    noteEdit->setFont(QFont(selectedFont));
     noteEdit->setPlaceholderText("Note");
+    noteEdit->setStyleSheet("color: #FFFFFF; font-size:  10px;");
 
     notesList = new QListWidget(this);
     notesList->setMinimumSize(50, 20);  // 560);
     notesList->setMaximumSize(215, notesList->maximumHeight());
-    notesList->setFont(QFont("SF Pro Black", 10));
+    notesList->setFont(QFont(selectedFont));
+    notesList->setStyleSheet("color: #FFFFFF; font-size:  9px;");
 
     saveButton = new QPushButton("SAVE", this);
     saveButton->setMinimumSize(50, 30);
-    saveButton->setFont(QFont("SF Pro Black", 10));
+    saveButton->setFont(QFont(selectedFont));
+    saveButton->setStyleSheet("color: #FFFFFF; font-size:  10px;");
 
     backButton = new QPushButton("BACK", this);
     backButton->setMinimumSize(50, 30);
-    backButton->setFont(QFont("SF Pro Black", 10));
+    backButton->setFont(QFont(selectedFont));
+    backButton->setStyleSheet("color: #FFFFFF; font-size:  10px;");
 
     removeButton = new QPushButton("REMOVE", this);
     removeButton->setMinimumSize(50, 30);
-    removeButton->setFont(QFont("SF Pro Black", 10));
+    removeButton->setFont(QFont(selectedFont));
+    removeButton->setStyleSheet("color: #FFFFFF; font-size:  10px;");
 
-    hideNotesList = new QPushButton("HIDE", this);
-    hideNotesList->setMaximumSize(101, 30);
-    hideNotesList->setFont(QFont("SF Pro Black", 10));
+    hideNotesList = new QPushButton("|||", this);
+    hideNotesList->setMaximumSize(41, 30);
+    hideNotesList->setFont(QFont(selectedFont));
+    hideNotesList->setStyleSheet("color: #FFFFFF; font-size:  10px;");
 
     fullScreen = new QPushButton("MAXIMIZE", this);
-    fullScreen->setMaximumSize(101, 30);
-    fullScreen->setFont(QFont("SF Pro Black", 10));
+    fullScreen->setMaximumSize(161, 30);
+    fullScreen->setFont(QFont(selectedFont));
+    fullScreen->setStyleSheet("color: #FFFFFF; font-size:  10px;");
 
     setStatusBar(statusBar);
+
+    //================================================================
 
     windowControl->addWidget(hideNotesList);
     windowControl->addWidget(fullScreen);
@@ -107,15 +120,17 @@ Notes::Notes(QMainWindow *parent) : QMainWindow(parent) {
 
     listLayout->addLayout(notesListItems);
     listLayout->addLayout(noteLayout);
-
     buttonsLayout->addWidget(hideNotesList);
     buttonsLayout->addWidget(fullScreen);
     buttonsLayout->addWidget(backButton);
+
     buttonsLayout->addWidget(removeButton);
     buttonsLayout->addWidget(saveButton);
 
     mainLayout->addLayout(listLayout);
     mainLayout->addLayout(buttonsLayout);
+
+    //================================================================
 
     bool isVisible = settings->value("isVisible", true).toBool();
     notesList->setVisible(isVisible);
@@ -127,6 +142,8 @@ Notes::Notes(QMainWindow *parent) : QMainWindow(parent) {
     } else {
         this->show();
     }
+
+    //================================================================
 
     connect(backButton, SIGNAL(clicked()), this, SLOT(toMainWindow()));
 
@@ -140,6 +157,8 @@ Notes::Notes(QMainWindow *parent) : QMainWindow(parent) {
             SLOT(doubleClick(QListWidgetItem *)));
 
     connect(hideNotesList, SIGNAL(clicked()), this, SLOT(hideList()));
+
+    //================================================================
 
     query.exec("SELECT * FROM notes");
     while (query.next()) {
@@ -168,7 +187,7 @@ void Notes::hideList() {
 
     notesList->setVisible(!notesList->isVisible());
     settings->setValue("isVisible", notesList->isVisible());
-    hideNotesList->setText(notesList->isVisible() ? "HIDE" : "SHOW");
+    hideNotesList->setText(notesList->isVisible() ? "|||" : "|||");
 }
 
 void Notes::openFullScreen() {
@@ -185,9 +204,9 @@ void Notes::toMainWindow() {
         settings->setValue("geometry", saveGeometry());
 
         close();
-        MainWindow *mainWindow = new MainWindow(this);
-        mainWindow->setWindowIcon(QIcon("://home.svg"));
-        mainWindow->show();
+        //MainWindow *mainWindow = new MainWindow(this);
+        //mainWindow->setWindowIcon(QIcon("://home.svg"));
+        //mainWindow->show();
     } else {
         qDebug() << "Save the note first.";
         statusBar->showMessage("Save the note first.");

@@ -4,77 +4,90 @@ QStatusBar {
 
 
 QMainWindow {
-    background-color: #373737;
+    background-color: #2e3440;
 }
 
 
 QPushButton {
-        background-color: #424242;
+        background-color: #353a44;
         color: #ffffff;
         border-width: 2px;
         border-style: solid;
         border-radius: 10px;
-        border-color: #424242;
-        alternate-background-color: #303030;
+        border-color: #353a44;
+        alternate-background-color: #556075;
 }
 
 
 QLineEdit {
-        background-color: #424242;
-        selection-background-color: #999999;
+        background-color: #353a44;
+        selection-background-color: #556075;
         selection-color: #ffffff;
         color: #ffffff;
         border-width: 2px;
         border-style: solid;
         border-radius: 10px;
-        border-color: #424242;
-        alternate-background-color: #303030;
+        border-color: #353a44;
+        alternate-background-color: #556075;
 }
 
 
 QTextEdit {
-        background-color: #424242;
-        selection-background-color: #999999;
+        background-color: #353a44;
+        selection-background-color: #556075;
         selection-color: #ffffff;
         color: #ffffff;
         border-width: 2px;
         border-style: solid;
         border-radius: 10px;
-        border-color: #424242;
-        alternate-background-color: #303030;
+        border-color: #353a44;
+        alternate-background-color: #556075;
 }
 
 
 QListWidget {
-        background-color: #424242;
-        selection-background-color: #999999;
+        background-color: #353a44;
+        selection-background-color: #556075;
         selection-color: #ffffff;
         color: #ffffff;
         border-width: 2px;
         border-style: solid;
         border-radius: 10px;
-        border-color: #424242;
-        alternate-background-color: #303030;
+        border-color: #353a44;
+        alternate-background-color: #556075;
 }
 
 
+QProgressBar {
+    color: #ffffff;
+    background-color: #2e3440;
+}
 
 
-
+QFontComboBox {
+    alternate-background-color: #353a44;
+    border-color: #353a44;
+    border-radius: 10px;
+    background-color: #353a44;
+    color: #ffffff;
+    border-color: #2e3440;
+    gridline-color: #2e3440;
+    selection-background-color: #2e3440;
+}
 
 
 QScrollBar:horizontal
 {
     height: 10px;
     margin: 3px 15px 3px 15px;
-    border: 1px #303030;
+    border: 1px #556075;
     border-radius: 4px;
-    background-color: yellow;
+    background-color: #353a44;
 }
 
 QScrollBar::handle:horizontal
 {
-    background-color: #999999;
+    background-color: #556075;
     min-width: 2px;
     border-radius: 4px;
 }
@@ -134,10 +147,10 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal
 
 QScrollBar:vertical
 {
-    background-color: #2A2929;
+    background-color: #2b303b;
     width: 15px;
     margin: 3px 15px 3px 15px;
-    border: 1px #2A2929;
+    border: 1px #2b303b;
     border-radius: 4px;
 }
 
@@ -202,10 +215,10 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical
 
 QScrollBar:vertical
 {
-    background-color: #2A2929;
+    background-color: #2b303b;
     width: 15px;
     margin: 15px 3px 15px 3px;
-    border: 1px #2A2929;
+    border: 1px #2b303b;
     border-radius: 4px;
 }
 
@@ -268,7 +281,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical
 
 QScrollBar:vertical {
     border: none;
-    background: white;
+    background: #353a44;
     width: 3px;
     margin: 0px 0px 0px 0px;
 }

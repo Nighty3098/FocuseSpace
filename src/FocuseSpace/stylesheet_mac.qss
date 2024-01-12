@@ -4,64 +4,64 @@ QStatusBar {
 
 
 QMainWindow {
-    background-color: #1d2021;
+    background-color: #373737;
 }
 
 
 QPushButton {
-        background-color: #292b2a;
+        background-color: #424242;
         color: #ffffff;
         border-width: 2px;
         border-style: solid;
         border-radius: 10px;
-        border-color: #292b2a;
+        border-color: #424242;
         alternate-background-color: #303030;
 }
 
 
 QLineEdit {
-        background-color: #292b2a;
-        selection-background-color: #1d2021;
+        background-color: #424242;
+        selection-background-color: #999999;
         selection-color: #ffffff;
         color: #ffffff;
         border-width: 2px;
         border-style: solid;
         border-radius: 10px;
-        border-color: #292b2a;
+        border-color: #424242;
         alternate-background-color: #303030;
 }
 
 
 QTextEdit {
-        background-color: #292b2a;
-        selection-background-color: #1d2021;
+        background-color: #424242;
+        selection-background-color: #999999;
         selection-color: #ffffff;
         color: #ffffff;
         border-width: 2px;
         border-style: solid;
         border-radius: 10px;
-        border-color: #292b2a;
+        border-color: #424242;
         alternate-background-color: #303030;
 }
 
 
 QListWidget {
-        background-color: #292b2a;
-        selection-background-color: #1d2021;
+        background-color: #424242;
+        selection-background-color: #999999;
         selection-color: #ffffff;
         color: #ffffff;
         border-width: 2px;
         border-style: solid;
         border-radius: 10px;
-        border-color: #292b2a;
+        border-color: #424242;
         alternate-background-color: #303030;
 }
 
-
 QProgressBar {
     color: #ffffff;
-    background-color: #1d2021;
+    background-color: #373737;
 }
+
 
 
 
@@ -72,12 +72,12 @@ QScrollBar:horizontal
     margin: 3px 15px 3px 15px;
     border: 1px #303030;
     border-radius: 4px;
-    background-color: #1d2021;
+    background-color: yellow;
 }
 
 QScrollBar::handle:horizontal
 {
-    background-color: #f9f5d9;
+    background-color: #999999;
     min-width: 2px;
     border-radius: 4px;
 }
@@ -146,7 +146,7 @@ QScrollBar:vertical
 
 QScrollBar::handle:vertical
 {
-    background-color: #f9f5d9;
+    background-color: red;
     min-height: 5px;
     border-radius: 4px;
 }
@@ -271,7 +271,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical
 
 QScrollBar:vertical {
     border: none;
-    background: #282b2a;
+    background: white;
     width: 3px;
     margin: 0px 0px 0px 0px;
 }

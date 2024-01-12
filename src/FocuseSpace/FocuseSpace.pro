@@ -13,19 +13,15 @@ SOURCES += \
     mainwindow.cpp \
     notes.cpp \
     pomodoro.cpp \
-    tasks.cpp
+    tasks.cpp \
+    settings.cpp 
 
 HEADERS += \
     mainwindow.h \
     notes.h \
     pomodoro.h \
-    tasks.h
-
-FORMS += \
-    mainwindow.ui \
-    notes.ui \
-    pomodoro.ui \
-    tasks.ui
+    tasks.h \
+    settings.h
 
 RESOURCES += \
     images/resource.qrc \

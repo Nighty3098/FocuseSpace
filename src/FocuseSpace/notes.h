@@ -37,6 +37,8 @@ class Notes : public QMainWindow {
     QHBoxLayout *noteNameLayout;
 
     QSettings *settings;
+    QSettings *GlobalSettings;
+
 
     bool isFullScreen;
 
@@ -50,6 +52,7 @@ class Notes : public QMainWindow {
     void doubleClick(QListWidgetItem *);
     void hideList();
     void openFullScreen();
+
 
    protected:
    private:
@@ -65,6 +68,7 @@ class Notes : public QMainWindow {
     QPushButton *removeButton;
     QPushButton *hideNotesList;
     QPushButton *fullScreen;
+
 
     Ui::Notes *ui;
     Notes *notes;

@@ -8,16 +8,18 @@
 #include <QTimer>
 #include <QVBoxLayout>
 #include <iomanip>
+#include <QSettings>
 
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include "ui_pomodoro.h"
 
 Pomodoro::Pomodoro(QMainWindow *parent) : QMainWindow(parent) {
     setWindowTitle("~ pomodoro ~");
 
-    QSettings settings("Pomodoro", "Pomodoro");
-    restoreGeometry(settings.value("geometry").toByteArray());
+    settings = new QSettings("Pomodoro", "Pomodoro");
+    restoreGeometry(settings->value("geometry").toByteArray());
+
+    GlobalSettings = new QSettings("Settings", "Settings");
+    QFont selectedFont = GlobalSettings->value("font").value<QFont>();
 
     setMinimumSize(200, 200);
 
@@ -30,32 +32,37 @@ Pomodoro::Pomodoro(QMainWindow *parent) : QMainWindow(parent) {
     buttonsLayout_2 = new QHBoxLayout;
 
     titleLabel = new QLabel(this);
-    titleLabel->setFont(QFont("SF Pro Black", 40));
+    titleLabel->setFont(QFont(selectedFont));
     titleLabel->setText("POMODORO");
     titleLabel->setGeometry(0, 5, 300, 120);
     titleLabel->setAlignment(Qt::AlignCenter);
-    titleLabel->setStyleSheet(" color: #ffffff; ");
+    titleLabel->setStyleSheet("color: #FFFFFF; font-size:  10px;");
 
     timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(updateTimer()));
-
+    
     progressBar = new QProgressBar(this);
     progressBar->setStyleSheet(" color: #ffffff; background-color: #2e3440;");
 
     startButton = new QPushButton("START", this);
     startButton->setMinimumSize(100, 30);
-    startButton->setFont(QFont("SF Pro Black", 12));
-    connect(startButton, SIGNAL(clicked()), this, SLOT(startPomodoro()));
-
+    startButton->setFont(QFont(selectedFont));
+    startButton->setStyleSheet("color: #FFFFFF; font-size:  10px;");
+    
     changeButton = new QPushButton("CHANGE", this);
     changeButton->setMinimumSize(100, 30);
-    changeButton->setFont(QFont("SF Pro Black", 12));
-    connect(changeButton, SIGNAL(clicked()), this, SLOT(change()));
-
+    changeButton->setFont(QFont(selectedFont));
+    changeButton->setStyleSheet("color: #FFFFFF; font-size:  10px;");
+    
     backButton = new QPushButton("BACK", this);
     backButton->setMinimumSize(100, 30);
-    backButton->setFont(QFont("SF Pro Black", 12));
+    backButton->setFont(QFont(selectedFont));
+    backButton->setStyleSheet("color: #FFFFFF; font-size:  10px;");
+
     connect(backButton, SIGNAL(clicked()), this, SLOT(toMainWindow()));
+    connect(changeButton, SIGNAL(clicked()), this, SLOT(change()));
+    connect(startButton, SIGNAL(clicked()), this, SLOT(startPomodoro()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(updateTimer()));
+
 
     infoLayout->addWidget(titleLabel);
 
@@ -76,8 +83,8 @@ Pomodoro::Pomodoro(QMainWindow *parent) : QMainWindow(parent) {
 
 Pomodoro::~Pomodoro() {
     delete ui;
-    QSettings settings("Pomodoro", "Pomodoro");
-    settings.setValue("geometry", saveGeometry());
+    settings = new QSettings("Pomodoro", "Pomodoro");
+    settings->setValue("geometry", saveGeometry());
 }
 
 void Pomodoro::startPomodoro() {

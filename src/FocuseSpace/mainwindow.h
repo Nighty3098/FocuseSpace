@@ -14,6 +14,7 @@
 #include "notes.h"
 #include "pomodoro.h"
 #include "tasks.h"
+#include "settings.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class QMainWindow; }
@@ -27,13 +28,19 @@ public:
     MainWindow(QMainWindow *parent = nullptr);
     ~MainWindow();
 
+    QSettings *settings;
+    QSettings *GlobalSettings;
+
 protected:
     void keyPressEvent(QKeyEvent *e) override;
+
 
 private slots:
     void openTasksWin();
     void openNotesWin();
     void openPomodoroWin();
+    void openSettingsWin();
+
 
 private:
     QStatusBar *statusBar;
@@ -41,11 +48,13 @@ private:
     QPushButton *openTasks;
     QPushButton *openNotes;
     QPushButton *openTimer;
+    QPushButton *openSettings;
     QLabel *imageLabel;
 
     Tasks *tasks_window;
     Notes *notes_window;
     Pomodoro *pomodoro_window;
+    Settings *settings_window;
 
 };
 #endif // MAINWINDOW_H

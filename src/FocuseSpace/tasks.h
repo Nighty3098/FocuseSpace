@@ -30,6 +30,9 @@ public:
     explicit Tasks(QMainWindow *parent = nullptr);
     ~Tasks();
 
+    QSettings *GlobalSettings;
+    QSettings *settings;
+
 private slots:
     void addTask();
     void toMainWindow();

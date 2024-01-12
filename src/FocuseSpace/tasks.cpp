@@ -15,12 +15,13 @@
 #include <QVBoxLayout>
 
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include "ui_tasks.h"
 
 Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent) {
-    QSettings settings("Tasks", "Tasks");
-    restoreGeometry(settings.value("geometry").toByteArray());
+    settings = new QSettings("Tasks", "Tasks");
+    restoreGeometry(settings->value("geometry").toByteArray());
+
+    GlobalSettings = new QSettings("Settings", "Settings");
+    QFont selectedFont = GlobalSettings->value("font").value<QFont>();
 
     QString str =
         "CREATE TABLE donetasks ( "
@@ -63,26 +64,55 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent) {
     mainLayout->setSpacing(10);
 
     statusBar = new QStatusBar(this);
+    statusBar->setFont(QFont(selectedFont));
+    statusBar->setStyleSheet("color: #FFFFFF; font-size:  9px;");
 
     taskList = new QListWidget(this);
-    taskList->setStyleSheet("border-color: #dd4853;");
+    taskList->setStyleSheet("border-color: #dd4853; font-size: 10px;");
     taskList->setMinimumSize(50, 50);
-    taskList->setFont(QFont("SF Pro Black", 12));
-    connect(taskList, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this,
-            SLOT(moveToDone(QListWidgetItem *)));
+    taskList->setFont(QFont(selectedFont));
+
 
     doneList = new QListWidget(this);
-    doneList->setStyleSheet("border-color: #74db6c; ");
+    doneList->setStyleSheet("border-color: #74db6c; font-size: 10px;");
     doneList->setMinimumSize(50, 50);
-    doneList->setFont(QFont("SF Pro Black", 12));
-    connect(doneList, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this,
-            SLOT(moveToTasks(QListWidgetItem *)));
+    doneList->setFont(QFont(selectedFont));
+
 
     taskInput = new QLineEdit(this);
-    taskInput->setFont(QFont("SF Pro Black", 12));
+    taskInput->setFont(QFont(selectedFont));
     taskInput->setMinimumSize(50, 30);
     taskInput->setAlignment(Qt::AlignCenter);
     taskInput->setPlaceholderText("Task");
+    taskInput->setStyleSheet("color: #FFFFFF; font-size:  10px;");
+
+
+    clearTask = new QPushButton("REMOVE", this);
+    clearTask->setFont(QFont(selectedFont));
+    clearTask->setMinimumSize(40, 30);
+    clearTask->setStyleSheet("color: #FFFFFF; font-size:  10px;");
+    
+    backButton = new QPushButton("BACK", this);
+    backButton->setFont(QFont(selectedFont));
+    backButton->setMinimumSize(40, 30);
+    backButton->setStyleSheet("color: #FFFFFF; font-size:  10px;");
+    
+    removeButton = new QPushButton("REMOVE", this);
+    removeButton->setFont(QFont(selectedFont));
+    removeButton->setMinimumSize(40, 30);
+    removeButton->setStyleSheet("color: #FFFFFF; font-size:  10px;");
+    
+    saveButton = new QPushButton("ADD TASK", this);
+    saveButton->setFont(QFont(selectedFont));
+    saveButton->setMinimumSize(100, 30);
+    saveButton->setStyleSheet("color: #FFFFFF; font-size:  10px;");
+    
+
+    connect(clearTask, SIGNAL(clicked()), this, SLOT(removeTask()));
+    connect(backButton, SIGNAL(clicked()), this, SLOT(toMainWindow()));
+    connect(removeButton, SIGNAL(clicked()), this, SLOT(removeDone()));
+    connect(saveButton, SIGNAL(clicked()), this, SLOT(addTask()));
+
     connect(taskInput, &QLineEdit::returnPressed, [=] {
         QString title = taskInput->text();
 
@@ -94,25 +124,13 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent) {
         }
     });
 
-    clearTask = new QPushButton("REMOVE", this);
-    clearTask->setFont(QFont("SF Pro Black", 10));
-    clearTask->setMinimumSize(40, 30);
-    connect(clearTask, SIGNAL(clicked()), this, SLOT(removeTask()));
+    connect(doneList, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this,
+            SLOT(moveToTasks(QListWidgetItem *)));
 
-    backButton = new QPushButton("BACK", this);
-    backButton->setFont(QFont("SF Pro Black", 10));
-    backButton->setMinimumSize(40, 30);
-    connect(backButton, SIGNAL(clicked()), this, SLOT(toMainWindow()));
+    connect(taskList, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this,
+            SLOT(moveToDone(QListWidgetItem *)));
 
-    removeButton = new QPushButton("REMOVE", this);
-    removeButton->setFont(QFont("SF Pro Black", 10));
-    removeButton->setMinimumSize(40, 30);
-    connect(removeButton, SIGNAL(clicked()), this, SLOT(removeDone()));
 
-    saveButton = new QPushButton("ADD TASK", this);
-    saveButton->setFont(QFont("SF Pro Black", 10));
-    saveButton->setMinimumSize(100, 30);
-    connect(saveButton, SIGNAL(clicked()), this, SLOT(addTask()));
 
     setStatusBar(statusBar);
 
@@ -161,8 +179,8 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent) {
 }
 
 Tasks::~Tasks() {
-    QSettings settings("Tasks", "Tasks");
-    settings.setValue("geometry", saveGeometry());
+    settings = new QSettings("Tasks", "Tasks");
+    settings->setValue("geometry", saveGeometry());
     delete ui;
 }
 
@@ -268,11 +286,11 @@ void Tasks::removeDone() {
 }
 
 void Tasks::toMainWindow() {
-    QSettings settings("Tasks", "Tasks");
-    settings.setValue("geometry", saveGeometry());
+    settings = new QSettings("Tasks", "Tasks");
+    settings->setValue("geometry", saveGeometry());
 
     close();
-    MainWindow *mainWindow = new MainWindow(this);
-    mainWindow->setWindowIcon(QIcon("://home.svg"));
-    mainWindow->show();
+    //MainWindow *mainWindow = new MainWindow(this);
+    //mainWindow->setWindowIcon(QIcon("://home.svg"));
+    //mainWindow->show();
 }

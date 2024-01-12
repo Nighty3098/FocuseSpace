@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QSettings>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Pomodoro; }
@@ -20,6 +21,9 @@ class Pomodoro : public QMainWindow
 public:
     explicit Pomodoro(QMainWindow *parent = nullptr);
     ~Pomodoro();
+
+    QSettings *GlobalSettings;
+    QSettings *settings;
 
 private slots:
     void toMainWindow();
