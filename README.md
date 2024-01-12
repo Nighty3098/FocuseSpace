@@ -33,11 +33,13 @@ bash build.sh
 ```
 
 <h1>Launch application</h1>
+
 ```shell
 bash FocuseSpace.sh
 ```
 
 <h1>Update application</h1>
+
 ```shell
 git pull && bash build.sh
 ```
