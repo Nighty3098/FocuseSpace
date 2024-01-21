@@ -36,7 +36,7 @@ Pomodoro::Pomodoro(QMainWindow *parent) : QMainWindow(parent) {
     titleLabel->setText("POMODORO");
     titleLabel->setGeometry(0, 5, 300, 120);
     titleLabel->setAlignment(Qt::AlignCenter);
-    titleLabel->setStyleSheet("color: #FFFFFF; font-size:  10px;");
+    titleLabel->setStyleSheet("color: #FFFFFF; font-size:  40px;");
 
     timer = new QTimer(this);
     
@@ -94,8 +94,7 @@ void Pomodoro::startPomodoro() {
         timeLeft = 25 * 60;
 
         titleLabel->setText("WORK");
-        titleLabel->setFont(QFont("SF Pro Black", 70));
-        titleLabel->setStyleSheet(" color: #c75057; ");
+        titleLabel->setStyleSheet(" color: #c75057; font-size: 70px;");
 
         progressBar->setRange(0, timeLeft);
         progressBar->setValue(timeLeft);
@@ -109,10 +108,9 @@ void Pomodoro::startPomodoro() {
         setWindowTitle(" ~ pomodoro ~ ");
 
         titleLabel->setText("POMODORO");
-        titleLabel->setStyleSheet(" color: #ffffff; ");
+        titleLabel->setStyleSheet(" color: #c75057; font-size: 40px;");
         titleLabel->setGeometry(0, 20, 250, 50);
         titleLabel->setAlignment(Qt::AlignCenter);
-        titleLabel->setFont(QFont("SF Pro Black", 40));
 
         progressBar->setValue(0);
 
@@ -132,8 +130,7 @@ void Pomodoro::startBreak() {
     timeLeft = 5 * 60;
 
     titleLabel->setText("BREAK");
-    titleLabel->setFont(QFont("SF Pro Black", 70));
-    titleLabel->setStyleSheet(" color: #81c750; ");
+    titleLabel->setStyleSheet(" color: #81c750; font-size: 70px;");
 
     progressBar->setRange(0, timeLeft);
     progressBar->setValue(timeLeft);
@@ -155,7 +152,9 @@ void Pomodoro::updateTimer() {
                                  .arg(minutes, 2, 10, QChar('0'))
                                  .arg(seconds, 2, 10, QChar('0'));
         titleLabel->setText(timeString);
-        titleLabel->setFont(QFont("SF Pro Black", 70));
+        if(isBreak) {titleLabel->setStyleSheet("color: #81c750;  font-size: 70px;");}
+        else{titleLabel->setStyleSheet("color: #c75057;  font-size: 70px;");}
+        
 
     } else {
         timer->stop();
@@ -167,7 +166,7 @@ void Pomodoro::updateTimer() {
             isPomodoro = true;
 
             titleLabel->setText("WORK");
-            titleLabel->setFont(QFont("SF Pro Black", 40));
+            titleLabel->setStyleSheet("color: #81c750; font-size: 40px;");
         }
     }
 }

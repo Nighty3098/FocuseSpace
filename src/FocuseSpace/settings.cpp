@@ -1,6 +1,7 @@
 #include "settings.h"
 #include "mainwindow.h"
 
+
 #include <QDebug>
 #include <QMainWindow>
 #include <QPalette>
@@ -12,6 +13,7 @@
 #include <QtSql/QSqlDatabase>
 #include <QPushButton>
 #include <QFontComboBox>
+#include <QFont>
 
 Settings::Settings(QMainWindow *parent) : QMainWindow(parent) {
     setWindowTitle(" ~ settings ~ ");
